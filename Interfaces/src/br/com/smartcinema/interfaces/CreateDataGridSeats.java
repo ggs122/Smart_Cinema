@@ -1,7 +1,13 @@
 package br.com.smartcinema.interfaces;
 
-@FunctionalInterface
+
 public interface CreateDataGridSeats {
 
-    void createDataGridSeats(int seatNumber, int aisleNumber, String fullName);
+    void addClient(String fullName, int line, int row);
+
+//    void createGridSeats(int seatNumber, int aisleNumber);
+
+    void createGridSeats(int seatNumber, int aisleNumber);
+
+    void printDataGridSeats();
 }
