@@ -4,6 +4,7 @@ import br.com.smartcinema.interfaces.CreateDataGridSeats;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class SeatsImpl implements CreateDataGridSeats {
 
@@ -16,11 +17,6 @@ public class SeatsImpl implements CreateDataGridSeats {
     private int rowIdentifier;
     private int seatIdentifier;
     SeatsImpl [][] dataGridSeats;
-
-//    private SeatsImpl(int seatNumber, int aisleNumber) {
-//        this.seatNumber = seatNumber;
-//        this.aisleNumber = aisleNumber;
-//    }
 
     private SeatsImpl(String fullName) {
         this.fullName = fullName;
@@ -58,13 +54,21 @@ public class SeatsImpl implements CreateDataGridSeats {
 
     @Override
     public void addClient(String fullName, int line, int row) {
+        if (line < 0 || line >= dataGridSeats.length || row < 0 || row >= dataGridSeats[line].length) {
+            System.out.println("--------------------------------------------------------------------------------");
+            System.out.println("Erro:Posição inválida (" + line + ", " + row + "). O cliente: " + fullName + " não foi adicionado.");
+            System.out.println("--------------------------------------------------------------------------------");
+            return;
+        }
+
         SeatsImpl seats = new SeatsImpl(fullName, line + 1, row + 1);
         dataGridSeats[line][row] = seats;
     }
 
     @Override
     public void printDataGridSeats() {
-
+        IO.println("ASSENTOS DISPONÍVEIS:");
+        Locale localeBr = Locale.forLanguageTag("pt-BR");
         if (dataGridSeats == null) {
             System.out.println("A sala de cinema ainda não foi criada.");
             return;
@@ -73,21 +77,11 @@ public class SeatsImpl implements CreateDataGridSeats {
         for (int i = 0; i < dataGridSeats.length; i++) {
             for (int j = 0; j < dataGridSeats[i].length; j++) {
                SeatsImpl seat = dataGridSeats[i][j];
-                System.out.print("[L" + seat.rowIdentifier + "-C" + seat.seatIdentifier + ": " + seat.fullName + "] ");
+//                System.out.print("[L" + seat.rowIdentifier + "-C" + seat.seatIdentifier + ": " + seat.fullName + "] ");
+                System.out.print(String.format(localeBr, "[L %-2d - C %d : %-18s]", seat.rowIdentifier, seat.seatIdentifier, seat.fullName));
             }
             System.out.println();
         }
-
-//        for (int i = 0; i < seatNumber; i++) {
-//            for (int j = 0; j < aisleNumber; j++) {
-//                if (dataGridSeats[i][j] == null) {
-//                    System.out.print("[Disponível]");
-//                } else {
-//                    System.out.print("[" + dataGridSeats[i][j].fullName + "]" + " ");
-//                }
-//            }
-//            System.out.println();
-//        }
     }
 
 }
