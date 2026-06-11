@@ -2,8 +2,6 @@ package br.com.smartcinema.seats;
 
 import br.com.smartcinema.interfaces.CreateDataGridSeats;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
 public class SeatsImpl implements CreateDataGridSeats {
@@ -13,6 +11,7 @@ public class SeatsImpl implements CreateDataGridSeats {
     private int movieTheaterNumber;
     private int amountSeat;
     private String fullName;
+    private String ticketNumber;
 
     private int rowIdentifier;
     private int seatIdentifier;
@@ -31,8 +30,9 @@ public class SeatsImpl implements CreateDataGridSeats {
         this.fullName = "Disponível";
     }
 
-    private SeatsImpl(String fullName, int rowIdentifier, int seatIdentifier) {
+    private SeatsImpl(String fullName, String ticketNumber, int rowIdentifier, int seatIdentifier) {
         this.fullName = fullName;
+        this.ticketNumber = ticketNumber;
         this.rowIdentifier = rowIdentifier;
         this.seatIdentifier = seatIdentifier;
     }
@@ -53,16 +53,25 @@ public class SeatsImpl implements CreateDataGridSeats {
     }
 
     @Override
-    public void addClient(String fullName, int line, int row) {
-        if (line < 0 || line >= dataGridSeats.length || row < 0 || row >= dataGridSeats[line].length) {
+    public void addClient(String fullName, String ticketNumber, int line, int row) {
+        if (line < 0 || line >= dataGridSeats.length || row < 0 || row >= dataGridSeats[line].length || ticketNumber == null) {
             System.out.println("--------------------------------------------------------------------------------");
             System.out.println("Erro:Posição inválida (" + line + ", " + row + "). O cliente: " + fullName + " não foi adicionado.");
             System.out.println("--------------------------------------------------------------------------------");
             return;
         }
 
-        SeatsImpl seats = new SeatsImpl(fullName, line + 1, row + 1);
-        dataGridSeats[line][row] = seats;
+       boolean regexTicketNumberBoolean = ticketNumber.matches("[a-z]{2}-[A-Z]{2}-\\d{6}");
+        if (regexTicketNumberBoolean == true) {
+            SeatsImpl seats = new SeatsImpl(fullName, ticketNumber, line + 1, row + 1);
+            dataGridSeats[line][row] = seats;
+        } else {
+            if (regexTicketNumberBoolean == false) {
+                IO.println("--------------------------------");
+                IO.println("Formato do bilhete não confere!!");
+                IO.println("--------------------------------");
+            }
+        }
     }
 
     @Override

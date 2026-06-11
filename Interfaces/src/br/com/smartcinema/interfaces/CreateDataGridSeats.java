@@ -3,7 +3,7 @@ package br.com.smartcinema.interfaces;
 
 public interface CreateDataGridSeats {
 
-    void addClient(String fullName, int line, int row);
+    void addClient(String fullName, String ticketNumber, int line, int row);
 
 //    void createGridSeats(int seatNumber, int aisleNumber);
 
